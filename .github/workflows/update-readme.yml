@@ -1,0 +1,38 @@
+name: Update README.md with Dependencies
+
+on:
+  push:
+    branches:
+      - main  # Триггер на пуш в ветку main (или другую нужную ветку)
+
+jobs:
+  update-readme:
+    runs-on: windows-latest
+
+    steps:
+      # Шаг 1: Клонирование репозитория
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Шаг 2: Установка Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Убедитесь, что указываете нужную версию Node.js
+
+      # Шаг 3: Установка зависимостей
+      - name: Install dependencies
+        run: npm install
+
+      # Шаг 4: Запуск скрипта для обновления README.md
+      - name: Update README.md
+        run: node update-readme.js
+
+      # Шаг 5: Коммит и пуш изменений в репозиторий
+      - name: Commit changes
+        run: |
+          git config --global user.name 'Your Name'
+          git config --global user.email 'your-email@example.com'
+          git add README.md
+          git commit -m 'Update dependencies list in README.md'
+          git push
